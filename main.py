@@ -13,17 +13,16 @@ if args.date == '':
 
     # Represent an empty string as the minimum date
     most_recent_date = datetime.min
-    
-    for file_name in os.listdir(args.path):
-        
-        # Extract the date part from the file name
-        file_name_date_str = file_name.split('_')[0]
+    if os.path.exists(args.path):
+        for file_name in os.listdir(args.path):
+            # Extract the date part from the file name
+            file_name_date_str = file_name.split('_')[0]
 
-        # Convert the date part to a datetime object
-        file_date = datetime.strptime(file_name_date_str, '%Y%m%d')  
-        
-        if file_date > most_recent_date:
-            most_recent_date = file_date
+            # Convert the date part to a datetime object
+            file_date = datetime.strptime(file_name_date_str, '%Y%m%d')  
+            
+            if file_date > most_recent_date:
+                most_recent_date = file_date
 
     save_text(most_recent_date.strftime("%Y%m%d"), args.path)
 else:
