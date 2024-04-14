@@ -3,6 +3,7 @@
 
 # Ignore fmb_txt_download folder
 *.txt
+!requirements.txt
 
 *.ipynb
 *.rar
