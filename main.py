@@ -1,7 +1,7 @@
 import argparse
 from get_fmb_text import save_text
 import os
-from datetime import datetime
+from datetime import datetime, date
 
 
 parser = argparse.ArgumentParser()
@@ -12,7 +12,7 @@ args = parser.parse_args()
 if args.date == '':
 
     # Represent an empty string as the minimum date
-    most_recent_date = datetime.min
+    most_recent_date = date(year=2008, month=1, day=1)
     if os.path.exists(args.path):
         for file_name in os.listdir(args.path):
             # Extract the date part from the file name
