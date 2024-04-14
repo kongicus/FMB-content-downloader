@@ -11,20 +11,20 @@ args = parser.parse_args()
 
 if args.date == '':
 
-    # 将空字符串表示为最小的日期
+    # Represent an empty string as the minimum date
     most_recent_date = datetime.min
     
     for file_name in os.listdir(args.path):
         
-        # 提取文件名中的日期部分
+        # Extract the date part from the file name
         file_name_date_str = file_name.split('_')[0]
 
-        # 将日期部分转换为 datetime 对象
+        # Convert the date part to a datetime object
         file_date = datetime.strptime(file_name_date_str, '%Y%m%d')  
         
         if file_date > most_recent_date:
             most_recent_date = file_date
-            
+
     save_text(most_recent_date.strftime("%Y%m%d"), args.path)
 else:
     save_text(args.date, args.path)
