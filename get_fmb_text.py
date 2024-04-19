@@ -4,16 +4,30 @@ from bs4 import BeautifulSoup
 import requests
 import datetime
 import os
+import logging
+
+
+logger = logging.getLogger(__name__)
+
+
+ENCODING = None
+
 
 # Fetch the webpage, re-encode it using 'euc-jp', and pass it to BeautifulSoup.
 def get_webpage_encoding_soup(weblink):
+    global ENCODING
+
     # send a GET request to fetch the webpage of list
     response = requests.get(weblink)
-    response.encoding = response.apparent_encoding
+
+    if ENCODING is None:
+        ENCODING = response.apparent_encoding
+    response.encoding = ENCODING
 
     # parse the HTML using BeautifulSoup
     soup = BeautifulSoup(response.text, 'html.parser')
     return soup
+
 
 def get_links_dict(start_month):
     index_link = 'http://www6.airnet.ne.jp/kosaka/kinki/radio/ongakuhon/sfs6_diary/sfs6_diary/'
@@ -48,12 +62,16 @@ def get_links_dict(start_month):
 
     return links_dict
 
+
 def save_text(start_date: str, path: str):
     if not os.path.exists(path):
+        logger.info(f"creating download dir {path}")
         os.makedirs(path, exist_ok=True)
     # e.g. start_date: 20240101
 
     start_date = datetime.datetime.strptime(start_date, "%Y%m%d")
+
+    logger.info("getting page index")
     links_dict = get_links_dict(start_date)
 
     for value in links_dict.values():
@@ -115,4 +133,4 @@ def save_text(start_date: str, path: str):
             with open(file_path, 'w', encoding='utf-8') as file:
                 file.write(text_content)
 
-            print(f'save as {file_name}.txt')
+            logger.info(f'save as {file_name}.txt')
